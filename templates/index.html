@@ -1,0 +1,179 @@
+{% extends "base.html" %}
+
+{% block title %}Study2Study - Free Education Platform{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="bg-primary text-white py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h1 class="display-4 fw-bold mb-4">Learn Without Limits</h1>
+                <p class="lead mb-4">
+                    Access high-quality education for free. Master new skills, explore subjects, and advance your knowledge with our comprehensive course library.
+                </p>
+                <div class="d-flex gap-3 flex-wrap">
+                    <a href="{{ url_for('courses') }}" class="btn btn-light btn-lg">
+                        <i data-feather="play-circle" class="me-2"></i>
+                        Start Learning
+                    </a>
+                    <a href="{{ url_for('resources') }}" class="btn btn-outline-light btn-lg">
+                        <i data-feather="download" class="me-2"></i>
+                        Browse Resources
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-6 text-center">
+                <div class="hero-illustration">
+                    <i data-feather="book-open" style="width: 200px; height: 200px;" class="text-white-50"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row text-center mb-5">
+            <div class="col-lg-6 mx-auto">
+                <h2 class="display-6 fw-bold mb-3">Why Choose Study2Study?</h2>
+                <p class="lead text-muted">We're committed to making quality education accessible to everyone.</p>
+            </div>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="text-center">
+                    <div class="feature-icon bg-primary bg-opacity-10 rounded-circle p-3 d-inline-flex mb-3">
+                        <i data-feather="zap" class="text-primary" style="width: 32px; height: 32px;"></i>
+                    </div>
+                    <h4 class="fw-bold mb-2">100% Free</h4>
+                    <p class="text-muted">All courses and resources are completely free. No hidden fees, no subscriptions.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="text-center">
+                    <div class="feature-icon bg-success bg-opacity-10 rounded-circle p-3 d-inline-flex mb-3">
+                        <i data-feather="clock" class="text-success" style="width: 32px; height: 32px;"></i>
+                    </div>
+                    <h4 class="fw-bold mb-2">Learn at Your Pace</h4>
+                    <p class="text-muted">Self-paced learning with progress tracking. Study when it's convenient for you.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="text-center">
+                    <div class="feature-icon bg-info bg-opacity-10 rounded-circle p-3 d-inline-flex mb-3">
+                        <i data-feather="award" class="text-info" style="width: 32px; height: 32px;"></i>
+                    </div>
+                    <h4 class="fw-bold mb-2">Expert Instructors</h4>
+                    <p class="text-muted">Learn from experienced educators and industry professionals.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Subject Categories -->
+<section class="py-5 bg-light bg-opacity-50">
+    <div class="container">
+        <div class="row text-center mb-5">
+            <div class="col-lg-6 mx-auto">
+                <h2 class="display-6 fw-bold mb-3">Explore Subjects</h2>
+                <p class="lead text-muted">Discover courses across multiple disciplines.</p>
+            </div>
+        </div>
+        
+        <div class="row g-4">
+            {% for subject in subjects %}
+            <div class="col-sm-6 col-lg-3">
+                <a href="{{ url_for('courses', subject=subject) }}" class="text-decoration-none">
+                    <div class="card h-100 text-center border-0 shadow-sm">
+                        <div class="card-body p-4">
+                            <div class="subject-icon mb-3">
+                                {% if subject == 'Mathematics' %}
+                                    <i data-feather="trending-up" class="text-primary" style="width: 48px; height: 48px;"></i>
+                                {% elif subject == 'Science' %}
+                                    <i data-feather="zap" class="text-success" style="width: 48px; height: 48px;"></i>
+                                {% elif subject == 'Programming' %}
+                                    <i data-feather="code" class="text-info" style="width: 48px; height: 48px;"></i>
+                                {% elif subject == 'Language Arts' %}
+                                    <i data-feather="edit" class="text-warning" style="width: 48px; height: 48px;"></i>
+                                {% else %}
+                                    <i data-feather="book" class="text-secondary" style="width: 48px; height: 48px;"></i>
+                                {% endif %}
+                            </div>
+                            <h5 class="card-title fw-bold">{{ subject }}</h5>
+                            <p class="card-text text-muted small">Explore {{ subject.lower() }} courses</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Featured Courses -->
+<section class="py-5">
+    <div class="container">
+        <div class="row align-items-center mb-5">
+            <div class="col">
+                <h2 class="display-6 fw-bold mb-0">Featured Courses</h2>
+            </div>
+            <div class="col-auto">
+                <a href="{{ url_for('courses') }}" class="btn btn-outline-primary">
+                    View All Courses
+                    <i data-feather="arrow-right" class="ms-2"></i>
+                </a>
+            </div>
+        </div>
+        
+        <div class="row g-4">
+            {% for course in featured_courses %}
+            <div class="col-lg-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <span class="badge bg-primary bg-opacity-10 text-primary">{{ course.subject }}</span>
+                            <span class="badge bg-secondary bg-opacity-10 text-secondary">{{ course.difficulty }}</span>
+                        </div>
+                        
+                        <h5 class="card-title fw-bold mb-2">{{ course.title }}</h5>
+                        <p class="card-text text-muted mb-3">{{ course.description[:100] }}...</p>
+                        
+                        <div class="d-flex align-items-center text-muted small mb-3">
+                            <i data-feather="user" class="me-2" style="width: 16px; height: 16px;"></i>
+                            <span class="me-3">{{ course.instructor }}</span>
+                            <i data-feather="clock" class="me-2" style="width: 16px; height: 16px;"></i>
+                            <span>{{ course.duration }}</span>
+                        </div>
+                        
+                        <a href="{{ url_for('course_detail', course_id=course.id) }}" class="btn btn-primary w-100">
+                            Start Course
+                            <i data-feather="arrow-right" class="ms-2"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action -->
+<section class="bg-dark text-white py-5">
+    <div class="container text-center">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <h2 class="display-6 fw-bold mb-3">Ready to Start Learning?</h2>
+                <p class="lead mb-4">Join thousands of learners who are advancing their skills with Study2Study.</p>
+                <a href="{{ url_for('courses') }}" class="btn btn-primary btn-lg">
+                    <i data-feather="play-circle" class="me-2"></i>
+                    Browse All Courses
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

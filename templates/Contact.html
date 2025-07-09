@@ -1,0 +1,261 @@
+{% extends "base.html" %}
+
+{% block title %}Contact Us - Study2Study{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Page Header -->
+    <div class="row mb-5">
+        <div class="col-lg-8 mx-auto text-center">
+            <h1 class="display-5 fw-bold mb-3">Get in Touch</h1>
+            <p class="lead text-muted">Have questions, feedback, or suggestions? We'd love to hear from you and help improve your learning experience.</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Contact Form -->
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-5">
+                    <h3 class="fw-bold mb-4">Send us a Message</h3>
+                    
+                    <form action="{{ url_for('contact') }}" method="POST">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="name" class="form-label fw-bold">Full Name *</label>
+                                <input type="text" class="form-control" id="name" name="name" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="email" class="form-label fw-bold">Email Address *</label>
+                                <input type="email" class="form-control" id="email" name="email" required>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="subject" class="form-label fw-bold">Subject *</label>
+                            <select class="form-select" id="subject" name="subject" required>
+                                <option value="">Choose a subject...</option>
+                                <option value="general">General Inquiry</option>
+                                <option value="course-suggestion">Course Suggestion</option>
+                                <option value="technical-issue">Technical Issue</option>
+                                <option value="content-feedback">Content Feedback</option>
+                                <option value="partnership">Partnership Opportunity</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="message" class="form-label fw-bold">Message *</label>
+                            <textarea class="form-control" id="message" name="message" rows="6" 
+                                      placeholder="Tell us how we can help you..." required></textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i data-feather="send" class="me-2"></i>
+                            Send Message
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Information -->
+        <div class="col-lg-4">
+            <!-- Contact Methods -->
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body p-4">
+                    <h5 class="fw-bold mb-4">Other Ways to Reach Us</h5>
+                    
+                    <div class="contact-method mb-4">
+                        <div class="d-flex align-items-start">
+                            <div class="contact-icon bg-primary bg-opacity-10 rounded p-2 me-3">
+                                <i data-feather="mail" class="text-primary" style="width: 20px; height: 20px;"></i>
+                            </div>
+                            <div>
+                                <h6 class="fw-bold mb-1">Email Support</h6>
+                                <p class="text-muted small mb-0">hello@study2study.com</p>
+                                <small class="text-muted">We typically respond within 24 hours</small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-method mb-4">
+                        <div class="d-flex align-items-start">
+                            <div class="contact-icon bg-success bg-opacity-10 rounded p-2 me-3">
+                                <i data-feather="message-circle" class="text-success" style="width: 20px; height: 20px;"></i>
+                            </div>
+                            <div>
+                                <h6 class="fw-bold mb-1">Community Forum</h6>
+                                <p class="text-muted small mb-0">Join our community</p>
+                                <small class="text-muted">Get help from other learners</small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-method">
+                        <div class="d-flex align-items-start">
+                            <div class="contact-icon bg-info bg-opacity-10 rounded p-2 me-3">
+                                <i data-feather="help-circle" class="text-info" style="width: 20px; height: 20px;"></i>
+                            </div>
+                            <div>
+                                <h6 class="fw-bold mb-1">Help Center</h6>
+                                <p class="text-muted small mb-0">Browse FAQs and guides</p>
+                                <small class="text-muted">Find quick answers</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FAQ Section -->
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <h5 class="fw-bold mb-4">Frequently Asked Questions</h5>
+                    
+                    <div class="accordion accordion-flush" id="faqAccordion">
+                        <div class="accordion-item border-0">
+                            <h6 class="accordion-header">
+                                <button class="accordion-button collapsed p-0 fw-bold text-body border-0 bg-transparent shadow-none" 
+                                        type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                                    Are all courses really free?
+                                </button>
+                            </h6>
+                            <div id="faq1" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body p-0 pt-2">
+                                    <p class="text-muted small">Yes! All our courses and resources are completely free. We believe education should be accessible to everyone.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="accordion-item border-0">
+                            <h6 class="accordion-header">
+                                <button class="accordion-button collapsed p-0 fw-bold text-body border-0 bg-transparent shadow-none" 
+                                        type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                                    How do I track my progress?
+                                </button>
+                            </h6>
+                            <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body p-0 pt-2">
+                                    <p class="text-muted small">Your progress is automatically saved as you complete lessons. No account required - we use browser storage to track your learning.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="accordion-item border-0">
+                            <h6 class="accordion-header">
+                                <button class="accordion-button collapsed p-0 fw-bold text-body border-0 bg-transparent shadow-none" 
+                                        type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                                    Can I suggest new courses?
+                                </button>
+                            </h6>
+                            <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body p-0 pt-2">
+                                    <p class="text-muted small">Absolutely! Use the contact form with "Course Suggestion" as the subject to share your ideas for new courses or topics.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Team Section -->
+    <div class="row mt-5">
+        <div class="col">
+            <div class="text-center mb-5">
+                <h3 class="fw-bold mb-3">Our Mission</h3>
+                <p class="lead text-muted">Making quality education accessible and free for learners worldwide.</p>
+            </div>
+            
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card border-0 bg-light bg-opacity-50 text-center p-4">
+                        <i data-feather="heart" class="text-danger mb-3" style="width: 48px; height: 48px;"></i>
+                        <h5 class="fw-bold mb-2">Passionate</h5>
+                        <p class="text-muted small">We're passionate about education and believe in the power of learning to change lives.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card border-0 bg-light bg-opacity-50 text-center p-4">
+                        <i data-feather="users" class="text-success mb-3" style="width: 48px; height: 48px;"></i>
+                        <h5 class="fw-bold mb-2">Community</h5>
+                        <p class="text-muted small">We're building a community of learners who support and inspire each other.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card border-0 bg-light bg-opacity-50 text-center p-4">
+                        <i data-feather="star" class="text-warning mb-3" style="width: 48px; height: 48px;"></i>
+                        <h5 class="fw-bold mb-2">Quality</h5>
+                        <p class="text-muted small">We're committed to providing high-quality, well-structured educational content.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    // Form validation and enhancement
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.querySelector('form');
+        const submitButton = form.querySelector('button[type="submit"]');
+        const originalButtonText = submitButton.innerHTML;
+        
+        form.addEventListener('submit', function(e) {
+            // Show loading state
+            submitButton.innerHTML = '<i data-feather="loader" class="me-2"></i>Sending...';
+            submitButton.disabled = true;
+            
+            // Re-initialize feather icons for the new icon
+            feather.replace();
+            
+            // In a real application, you might want to prevent the default submission
+            // and handle it with AJAX for a better user experience
+        });
+        
+        // Character counter for message textarea
+        const messageTextarea = document.getElementById('message');
+        const maxLength = 1000;
+        
+        // Create character counter element
+        const counterElement = document.createElement('small');
+        counterElement.className = 'text-muted';
+        counterElement.style.float = 'right';
+        messageTextarea.parentNode.appendChild(counterElement);
+        
+        function updateCounter() {
+            const remaining = maxLength - messageTextarea.value.length;
+            counterElement.textContent = `${messageTextarea.value.length}/${maxLength} characters`;
+            
+            if (remaining < 50) {
+                counterElement.className = 'text-warning';
+            } else if (remaining < 0) {
+                counterElement.className = 'text-danger';
+            } else {
+                counterElement.className = 'text-muted';
+            }
+        }
+        
+        messageTextarea.addEventListener('input', updateCounter);
+        updateCounter(); // Initial call
+        
+        // Add helpful placeholder text based on subject selection
+        const subjectSelect = document.getElementById('subject');
+        subjectSelect.addEventListener('change', function() {
+            const placeholders = {
+                'general': 'Tell us how we can help you...',
+                'course-suggestion': 'What subject or topic would you like to see covered? Please provide details about the course content, difficulty level, and why you think it would be valuable.',
+                'technical-issue': 'Please describe the technical problem you\'re experiencing. Include details about what you were doing when the issue occurred.',
+                'content-feedback': 'Let us know your thoughts on our course content. What did you like? What could be improved?',
+                'partnership': 'Tell us about your organization and how you\'d like to partner with Study2Study.',
+                'other': 'Please describe your inquiry in detail...'
+            };
+            
+            messageTextarea.placeholder = placeholders[this.value] || placeholders['general'];
+        });
+    });
+</script>
+{% endblock %}

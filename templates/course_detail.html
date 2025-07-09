@@ -1,0 +1,237 @@
+{% extends "base.html" %}
+
+{% block title %}{{ course.title }} - Study2Study{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('index') }}" class="text-decoration-none">Home</a></li>
+            <li class="breadcrumb-item"><a href="{{ url_for('courses') }}" class="text-decoration-none">Courses</a></li>
+            <li class="breadcrumb-item active">{{ course.title }}</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <!-- Course Content -->
+        <div class="col-lg-8">
+            <!-- Course Header -->
+            <div class="course-header mb-5">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <span class="badge bg-primary bg-opacity-10 text-primary fs-6">{{ course.subject }}</span>
+                    <span class="badge 
+                        {% if course.difficulty == 'Beginner' %}bg-success bg-opacity-10 text-success
+                        {% elif course.difficulty == 'Intermediate' %}bg-warning bg-opacity-10 text-warning
+                        {% else %}bg-danger bg-opacity-10 text-danger{% endif %} fs-6">
+                        {{ course.difficulty }}
+                    </span>
+                </div>
+                
+                <h1 class="display-5 fw-bold mb-3">{{ course.title }}</h1>
+                <p class="lead text-muted mb-4">{{ course.description }}</p>
+                
+                <!-- Course Meta -->
+                <div class="row g-3 text-muted">
+                    <div class="col-sm-4">
+                        <div class="d-flex align-items-center">
+                            <i data-feather="user" class="me-2"></i>
+                            <div>
+                                <small class="d-block text-muted">Instructor</small>
+                                <strong class="text-body">{{ course.instructor }}</strong>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="d-flex align-items-center">
+                            <i data-feather="clock" class="me-2"></i>
+                            <div>
+                                <small class="d-block text-muted">Duration</small>
+                                <strong class="text-body">{{ course.duration }}</strong>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="d-flex align-items-center">
+                            <i data-feather="book-open" class="me-2"></i>
+                            <div>
+                                <small class="d-block text-muted">Lessons</small>
+                                <strong class="text-body">{{ course.lessons|length }} lessons</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Course Lessons -->
+            <div class="course-content">
+                <h3 class="fw-bold mb-4">Course Content</h3>
+                
+                <div class="lessons-list">
+                    {% for lesson in course.lessons %}
+                    <div class="card mb-3 border-0 shadow-sm lesson-item">
+                        <div class="card-body p-4">
+                            <div class="row align-items-center">
+                                <div class="col">
+                                    <div class="d-flex align-items-start">
+                                        <span class="lesson-number badge bg-primary bg-opacity-10 text-primary me-3 mt-1">
+                                            {{ lesson.order }}
+                                        </span>
+                                        <div class="flex-grow-1">
+                                            <h6 class="fw-bold mb-2">{{ lesson.title }}</h6>
+                                            <p class="text-muted small mb-2">{{ lesson.content[:150] }}...</p>
+                                            <div class="d-flex align-items-center text-muted small">
+                                                <i data-feather="clock" class="me-1" style="width: 14px; height: 14px;"></i>
+                                                <span>{{ lesson.duration }}</span>
+                                                {% if progress and lesson.id in progress.completed_lessons %}
+                                                <span class="badge bg-success bg-opacity-10 text-success ms-2">
+                                                    <i data-feather="check" class="me-1" style="width: 12px; height: 12px;"></i>
+                                                    Completed
+                                                </span>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-auto">
+                                    <a href="{{ url_for('lesson', course_id=course.id, lesson_id=lesson.id) }}" 
+                                       class="btn btn-outline-primary btn-sm">
+                                        <i data-feather="play" class="me-1"></i>
+                                        {% if progress and lesson.id in progress.completed_lessons %}
+                                            Review
+                                        {% else %}
+                                            Start
+                                        {% endif %}
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Course Tags -->
+            {% if course.tags %}
+            <div class="course-tags mt-5">
+                <h5 class="fw-bold mb-3">Tags</h5>
+                {% for tag in course.tags %}
+                <span class="badge bg-secondary bg-opacity-10 text-secondary me-2 mb-2">#{{ tag }}</span>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+            <div class="sticky-top" style="top: 100px;">
+                <!-- Progress Card -->
+                {% if progress %}
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-body p-4">
+                        <h5 class="fw-bold mb-3">Your Progress</h5>
+                        
+                        <div class="progress mb-3" style="height: 10px;">
+                            <div class="progress-bar bg-success" role="progressbar" 
+                                 style="width: {{ progress.progress_percentage }}%"
+                                 aria-valuenow="{{ progress.progress_percentage }}" 
+                                 aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between text-muted small mb-3">
+                            <span>{{ progress.completed_lessons|length }} of {{ course.lessons|length }} completed</span>
+                            <span>{{ "%.0f"|format(progress.progress_percentage) }}%</span>
+                        </div>
+                        
+                        <div class="text-muted small">
+                            <i data-feather="calendar" class="me-1" style="width: 14px; height: 14px;"></i>
+                            Last accessed: {{ progress.last_accessed.strftime('%B %d, %Y') }}
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Quick Actions -->
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-body p-4">
+                        <h5 class="fw-bold mb-3">Quick Actions</h5>
+                        
+                        {% if course.lessons %}
+                        <a href="{{ url_for('lesson', course_id=course.id, lesson_id=course.lessons[0].id) }}" 
+                           class="btn btn-primary w-100 mb-3">
+                            <i data-feather="play-circle" class="me-2"></i>
+                            {% if progress and progress.completed_lessons %}
+                                Continue Learning
+                            {% else %}
+                                Start First Lesson
+                            {% endif %}
+                        </a>
+                        {% endif %}
+                        
+                        <a href="{{ url_for('resources', category=course.subject) }}" 
+                           class="btn btn-outline-secondary w-100 mb-2">
+                            <i data-feather="download" class="me-2"></i>
+                            Download Resources
+                        </a>
+                        
+                        <button class="btn btn-outline-secondary w-100" onclick="shareContent()">
+                            <i data-feather="share-2" class="me-2"></i>
+                            Share Course
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Related Courses -->
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body p-4">
+                        <h5 class="fw-bold mb-3">More in {{ course.subject }}</h5>
+                        <div class="text-center">
+                            <i data-feather="book" class="text-muted mb-3" style="width: 48px; height: 48px;"></i>
+                            <p class="text-muted small mb-3">Explore more courses in this subject area.</p>
+                            <a href="{{ url_for('courses', subject=course.subject) }}" 
+                               class="btn btn-outline-primary btn-sm">
+                                View {{ course.subject }} Courses
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    function shareContent() {
+        if (navigator.share) {
+            navigator.share({
+                title: '{{ course.title }}',
+                text: '{{ course.description }}',
+                url: window.location.href
+            });
+        } else {
+            // Fallback: copy to clipboard
+            navigator.clipboard.writeText(window.location.href).then(() => {
+                alert('Course link copied to clipboard!');
+            });
+        }
+    }
+
+    // Add hover effects to lesson items
+    document.addEventListener('DOMContentLoaded', function() {
+        const lessonItems = document.querySelectorAll('.lesson-item');
+        
+        lessonItems.forEach(item => {
+            item.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateX(5px)';
+                this.style.transition = 'transform 0.3s ease';
+            });
+            
+            item.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateX(0)';
+            });
+        });
+    });
+</script>
+{% endblock %}

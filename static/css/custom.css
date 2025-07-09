@@ -1,0 +1,291 @@
+/* Custom styles for Study2Study */
+
+:root {
+    --study-primary: #0066cc;
+    --study-secondary: #6c757d;
+    --study-success: #28a745;
+    --study-info: #17a2b8;
+    --study-warning: #ffc107;
+    --study-danger: #dc3545;
+}
+
+/* Smooth scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Custom animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in-up {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+/* Hero section enhancements */
+.hero-illustration {
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+}
+
+/* Card hover effects */
+.card {
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Feature icons */
+.feature-icon {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Course cards */
+.course-card {
+    border-left: 4px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.course-card:hover {
+    border-left-color: var(--bs-primary);
+    transform: translateX(3px);
+}
+
+/* Subject icons */
+.subject-icon, .category-icon {
+    transition: transform 0.3s ease;
+}
+
+.card:hover .subject-icon,
+.card:hover .category-icon {
+    transform: scale(1.1);
+}
+
+/* Progress bars */
+.progress {
+    background-color: rgba(var(--bs-primary-rgb), 0.1);
+}
+
+.progress-bar {
+    transition: width 0.8s ease;
+}
+
+/* Lesson items */
+.lesson-item {
+    transition: all 0.3s ease;
+}
+
+.lesson-item:hover {
+    background-color: rgba(var(--bs-primary-rgb), 0.05);
+}
+
+.lesson-number {
+    min-width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+/* Resource cards */
+.resource-card {
+    border-top: 3px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.resource-card:hover {
+    border-top-color: var(--bs-primary);
+}
+
+/* Search enhancements */
+.search-result-card {
+    border-left: 3px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.search-result-card:hover {
+    border-left-color: var(--bs-success);
+}
+
+/* Contact form enhancements */
+.contact-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.contact-method {
+    transition: transform 0.3s ease;
+}
+
+.contact-method:hover {
+    transform: translateX(5px);
+}
+
+/* Footer styles */
+footer a:hover {
+    color: var(--bs-primary) !important;
+    transition: color 0.3s ease;
+}
+
+/* Loading states */
+.loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+/* Utility classes */
+.text-gradient {
+    background: linear-gradient(45deg, var(--bs-primary), var(--bs-info));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.shadow-soft {
+    box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.075) !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .display-1, .display-2, .display-3, .display-4, .display-5, .display-6 {
+        font-size: calc(1.5rem + 2.5vw);
+    }
+    
+    .hero-illustration {
+        margin-top: 2rem;
+    }
+    
+    .feature-icon {
+        width: 50px;
+        height: 50px;
+    }
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+    
+    html {
+        scroll-behavior: auto;
+    }
+}
+
+/* Focus states for better accessibility */
+.btn:focus,
+.form-control:focus,
+.form-select:focus {
+    box-shadow: 0 0 0 0.2rem rgba(var(--bs-primary-rgb), 0.25);
+}
+
+/* Custom badge styles */
+.badge {
+    font-weight: 500;
+    letter-spacing: 0.025em;
+}
+
+/* Navigation enhancements */
+.navbar-brand {
+    transition: transform 0.3s ease;
+}
+
+.navbar-brand:hover {
+    transform: scale(1.05);
+}
+
+/* Course content styling */
+.lesson-content {
+    line-height: 1.7;
+}
+
+.lesson-content h1, .lesson-content h2, .lesson-content h3, 
+.lesson-content h4, .lesson-content h5, .lesson-content h6 {
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+}
+
+.lesson-content p {
+    margin-bottom: 1.5rem;
+}
+
+/* Code and pre-formatted text */
+.lesson-content code {
+    background-color: rgba(var(--bs-dark-rgb), 0.1);
+    padding: 0.2rem 0.4rem;
+    border-radius: 0.25rem;
+    font-size: 0.875em;
+}
+
+.lesson-content pre {
+    background-color: rgba(var(--bs-dark-rgb), 0.05);
+    padding: 1rem;
+    border-radius: 0.5rem;
+    border-left: 4px solid var(--bs-primary);
+    overflow-x: auto;
+}
+
+/* Table styling */
+.lesson-content table {
+    width: 100%;
+    margin-bottom: 1.5rem;
+    border-collapse: collapse;
+}
+
+.lesson-content th,
+.lesson-content td {
+    padding: 0.75rem;
+    border: 1px solid rgba(var(--bs-dark-rgb), 0.1);
+}
+
+.lesson-content th {
+    background-color: rgba(var(--bs-primary-rgb), 0.1);
+    font-weight: 600;
+}
+
+/* Print styles */
+@media print {
+    .navbar, .footer, .btn, .card-footer {
+        display: none !important;
+    }
+    
+    .card {
+        border: 1px solid #ddd !important;
+        box-shadow: none !important;
+    }
+    
+    a {
+        color: #000 !important;
+        text-decoration: none !important;
+    }
+    
+    .lesson-content {
+        font-size: 12pt;
+        line-height: 1.5;
+    }
+}

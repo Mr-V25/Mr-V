@@ -1,0 +1,173 @@
+{% extends "base.html" %}
+
+{% block title %}Courses - Study2Study{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Page Header -->
+    <div class="row mb-5">
+        <div class="col">
+            <h1 class="display-5 fw-bold mb-3">All Courses</h1>
+            <p class="lead text-muted">Discover comprehensive courses across multiple subjects. All courses are free and self-paced.</p>
+        </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="row mb-4">
+        <div class="col">
+            <div class="card border-0 bg-light bg-opacity-50">
+                <div class="card-body">
+                    <form method="GET" class="row g-3 align-items-center">
+                        <div class="col-md-4">
+                            <label for="subject" class="form-label small fw-bold">Subject</label>
+                            <select name="subject" id="subject" class="form-select">
+                                <option value="">All Subjects</option>
+                                {% for subject in subjects %}
+                                <option value="{{ subject }}" {% if current_subject == subject %}selected{% endif %}>
+                                    {{ subject }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="difficulty" class="form-label small fw-bold">Difficulty</label>
+                            <select name="difficulty" id="difficulty" class="form-select">
+                                <option value="">All Levels</option>
+                                {% for difficulty in difficulties %}
+                                <option value="{{ difficulty }}" {% if current_difficulty == difficulty %}selected{% endif %}>
+                                    {{ difficulty }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label small fw-bold d-block">&nbsp;</label>
+                            <div class="d-flex gap-2">
+                                <button type="submit" class="btn btn-primary">
+                                    <i data-feather="filter" class="me-2"></i>
+                                    Apply Filters
+                                </button>
+                                <a href="{{ url_for('courses') }}" class="btn btn-outline-secondary">Clear</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Course Count -->
+    <div class="row mb-4">
+        <div class="col">
+            <p class="text-muted">
+                <strong>{{ courses|length }}</strong> course{{ 's' if courses|length != 1 else '' }} found
+                {% if current_subject or current_difficulty %}
+                    {% if current_subject and current_difficulty %}
+                        for <strong>{{ current_subject }}</strong> at <strong>{{ current_difficulty }}</strong> level
+                    {% elif current_subject %}
+                        in <strong>{{ current_subject }}</strong>
+                    {% elif current_difficulty %}
+                        at <strong>{{ current_difficulty }}</strong> level
+                    {% endif %}
+                {% endif %}
+            </p>
+        </div>
+    </div>
+
+    <!-- Courses Grid -->
+    {% if courses %}
+    <div class="row g-4">
+        {% for course in courses %}
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 border-0 shadow-sm course-card">
+                <div class="card-body p-4">
+                    <!-- Course Meta -->
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <span class="badge bg-primary bg-opacity-10 text-primary">{{ course.subject }}</span>
+                        <span class="badge 
+                            {% if course.difficulty == 'Beginner' %}bg-success bg-opacity-10 text-success
+                            {% elif course.difficulty == 'Intermediate' %}bg-warning bg-opacity-10 text-warning
+                            {% else %}bg-danger bg-opacity-10 text-danger{% endif %}">
+                            {{ course.difficulty }}
+                        </span>
+                    </div>
+
+                    <!-- Course Title and Description -->
+                    <h5 class="card-title fw-bold mb-3">{{ course.title }}</h5>
+                    <p class="card-text text-muted mb-3">{{ course.description }}</p>
+
+                    <!-- Course Details -->
+                    <div class="course-meta mb-3">
+                        <div class="d-flex align-items-center text-muted small mb-2">
+                            <i data-feather="user" class="me-2" style="width: 16px; height: 16px;"></i>
+                            <span>{{ course.instructor }}</span>
+                        </div>
+                        <div class="d-flex align-items-center text-muted small mb-2">
+                            <i data-feather="clock" class="me-2" style="width: 16px; height: 16px;"></i>
+                            <span>{{ course.duration }}</span>
+                        </div>
+                        <div class="d-flex align-items-center text-muted small">
+                            <i data-feather="book-open" class="me-2" style="width: 16px; height: 16px;"></i>
+                            <span>{{ course.lessons|length }} lesson{{ 's' if course.lessons|length != 1 else '' }}</span>
+                        </div>
+                    </div>
+
+                    <!-- Tags -->
+                    {% if course.tags %}
+                    <div class="course-tags mb-3">
+                        {% for tag in course.tags[:3] %}
+                        <span class="badge bg-secondary bg-opacity-10 text-secondary me-1">#{{ tag }}</span>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- Card Footer -->
+                <div class="card-footer bg-transparent border-0 p-4 pt-0">
+                    <a href="{{ url_for('course_detail', course_id=course.id) }}" class="btn btn-primary w-100">
+                        <i data-feather="play-circle" class="me-2"></i>
+                        Start Course
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <!-- No Courses Found -->
+    <div class="row">
+        <div class="col-lg-6 mx-auto text-center">
+            <div class="empty-state py-5">
+                <i data-feather="search" class="text-muted mb-3" style="width: 64px; height: 64px;"></i>
+                <h4 class="fw-bold mb-3">No Courses Found</h4>
+                <p class="text-muted mb-4">We couldn't find any courses matching your criteria. Try adjusting your filters or search terms.</p>
+                <a href="{{ url_for('courses') }}" class="btn btn-primary">
+                    <i data-feather="refresh-cw" class="me-2"></i>
+                    View All Courses
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    // Add hover effects to course cards
+    document.addEventListener('DOMContentLoaded', function() {
+        const courseCards = document.querySelectorAll('.course-card');
+        
+        courseCards.forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-5px)';
+                this.style.transition = 'transform 0.3s ease';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
+        });
+    });
+</script>
+{% endblock %}

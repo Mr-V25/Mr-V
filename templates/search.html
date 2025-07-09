@@ -1,0 +1,240 @@
+{% extends "base.html" %}
+
+{% block title %}{% if query %}Search: {{ query }}{% else %}Search{% endif %} - Study2Study{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Search Header -->
+    <div class="row mb-5">
+        <div class="col-lg-8 mx-auto text-center">
+            <h1 class="display-5 fw-bold mb-3">
+                {% if query %}
+                    Search Results
+                {% else %}
+                    Search Courses
+                {% endif %}
+            </h1>
+            {% if query %}
+                <p class="lead text-muted">Results for "<strong>{{ query }}</strong>"</p>
+            {% else %}
+                <p class="lead text-muted">Find the perfect course for your learning journey</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Enhanced Search Form -->
+    <div class="row mb-5">
+        <div class="col-lg-8 mx-auto">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <form action="{{ url_for('search') }}" method="GET">
+                        <div class="input-group input-group-lg">
+                            <span class="input-group-text bg-transparent border-end-0">
+                                <i data-feather="search"></i>
+                            </span>
+                            <input type="text" 
+                                   name="q" 
+                                   class="form-control border-start-0" 
+                                   placeholder="Search for courses, topics, instructors..."
+                                   value="{{ query }}"
+                                   autofocus>
+                            <button class="btn btn-primary" type="submit">
+                                Search
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if query %}
+        <!-- Search Results -->
+        <div class="row mb-4">
+            <div class="col">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h3 class="fw-bold mb-0">
+                        {{ results|length }} course{{ 's' if results|length != 1 else '' }} found
+                    </h3>
+                    {% if results|length > 0 %}
+                    <a href="{{ url_for('courses') }}" class="btn btn-outline-secondary">
+                        <i data-feather="grid" class="me-2"></i>
+                        Browse All Courses
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        {% if results %}
+        <!-- Results Grid -->
+        <div class="row g-4">
+            {% for course in results %}
+            <div class="col-lg-6">
+                <div class="card h-100 border-0 shadow-sm search-result-card">
+                    <div class="card-body p-4">
+                        <!-- Course Meta -->
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <span class="badge bg-primary bg-opacity-10 text-primary">{{ course.subject }}</span>
+                            <span class="badge 
+                                {% if course.difficulty == 'Beginner' %}bg-success bg-opacity-10 text-success
+                                {% elif course.difficulty == 'Intermediate' %}bg-warning bg-opacity-10 text-warning
+                                {% else %}bg-danger bg-opacity-10 text-danger{% endif %}">
+                                {{ course.difficulty }}
+                            </span>
+                        </div>
+
+                        <!-- Course Title and Description -->
+                        <h5 class="card-title fw-bold mb-3">{{ course.title }}</h5>
+                        <p class="card-text text-muted mb-3">{{ course.description }}</p>
+
+                        <!-- Course Details -->
+                        <div class="course-meta mb-3">
+                            <div class="d-flex align-items-center text-muted small mb-2">
+                                <i data-feather="user" class="me-2" style="width: 16px; height: 16px;"></i>
+                                <span class="me-3">{{ course.instructor }}</span>
+                                <i data-feather="clock" class="me-2" style="width: 16px; height: 16px;"></i>
+                                <span>{{ course.duration }}</span>
+                            </div>
+                            <div class="d-flex align-items-center text-muted small">
+                                <i data-feather="book-open" class="me-2" style="width: 16px; height: 16px;"></i>
+                                <span>{{ course.lessons|length }} lesson{{ 's' if course.lessons|length != 1 else '' }}</span>
+                            </div>
+                        </div>
+
+                        <!-- Tags -->
+                        {% if course.tags %}
+                        <div class="course-tags mb-3">
+                            {% for tag in course.tags[:3] %}
+                            <span class="badge bg-secondary bg-opacity-10 text-secondary me-1">#{{ tag }}</span>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+
+                        <!-- Action Button -->
+                        <a href="{{ url_for('course_detail', course_id=course.id) }}" class="btn btn-primary w-100">
+                            <i data-feather="play-circle" class="me-2"></i>
+                            View Course
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <!-- No Results -->
+        <div class="row">
+            <div class="col-lg-6 mx-auto text-center">
+                <div class="no-results py-5">
+                    <i data-feather="search" class="text-muted mb-3" style="width: 64px; height: 64px;"></i>
+                    <h4 class="fw-bold mb-3">No Courses Found</h4>
+                    <p class="text-muted mb-4">
+                        We couldn't find any courses matching "<strong>{{ query }}</strong>". 
+                        Try different keywords or browse our course categories.
+                    </p>
+                    
+                    <!-- Search Suggestions -->
+                    <div class="search-suggestions mb-4">
+                        <h6 class="fw-bold mb-3">Try searching for:</h6>
+                        <div class="d-flex flex-wrap justify-content-center gap-2">
+                            <a href="{{ url_for('search', q='python') }}" class="badge bg-primary bg-opacity-10 text-primary text-decoration-none p-2">Python</a>
+                            <a href="{{ url_for('search', q='algebra') }}" class="badge bg-primary bg-opacity-10 text-primary text-decoration-none p-2">Algebra</a>
+                            <a href="{{ url_for('search', q='physics') }}" class="badge bg-primary bg-opacity-10 text-primary text-decoration-none p-2">Physics</a>
+                            <a href="{{ url_for('search', q='writing') }}" class="badge bg-primary bg-opacity-10 text-primary text-decoration-none p-2">Writing</a>
+                            <a href="{{ url_for('search', q='calculus') }}" class="badge bg-primary bg-opacity-10 text-primary text-decoration-none p-2">Calculus</a>
+                        </div>
+                    </div>
+                    
+                    <a href="{{ url_for('courses') }}" class="btn btn-primary">
+                        <i data-feather="grid" class="me-2"></i>
+                        Browse All Courses
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    {% else %}
+        <!-- Search Tips -->
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="search-tips">
+                    <h3 class="fw-bold mb-4 text-center">Search Tips</h3>
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="tip-card p-4 border rounded">
+                                <div class="d-flex align-items-start">
+                                    <i data-feather="target" class="text-primary me-3 mt-1" style="width: 24px; height: 24px;"></i>
+                                    <div>
+                                        <h6 class="fw-bold mb-2">Be Specific</h6>
+                                        <p class="text-muted small mb-0">Use specific terms like "Python programming" or "linear algebra" for better results.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="tip-card p-4 border rounded">
+                                <div class="d-flex align-items-start">
+                                    <i data-feather="tag" class="text-success me-3 mt-1" style="width: 24px; height: 24px;"></i>
+                                    <div>
+                                        <h6 class="fw-bold mb-2">Use Keywords</h6>
+                                        <p class="text-muted small mb-0">Search by subject, instructor name, or course difficulty level.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Popular Searches -->
+                <div class="popular-searches mt-5 text-center">
+                    <h4 class="fw-bold mb-3">Popular Searches</h4>
+                    <div class="d-flex flex-wrap justify-content-center gap-2">
+                        <a href="{{ url_for('search', q='beginner') }}" class="btn btn-outline-primary btn-sm">Beginner Courses</a>
+                        <a href="{{ url_for('search', q='programming') }}" class="btn btn-outline-primary btn-sm">Programming</a>
+                        <a href="{{ url_for('search', q='mathematics') }}" class="btn btn-outline-primary btn-sm">Mathematics</a>
+                        <a href="{{ url_for('search', q='science') }}" class="btn btn-outline-primary btn-sm">Science</a>
+                        <a href="{{ url_for('search', q='web development') }}" class="btn btn-outline-primary btn-sm">Web Development</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    // Add hover effects to search result cards
+    document.addEventListener('DOMContentLoaded', function() {
+        const resultCards = document.querySelectorAll('.search-result-card');
+        
+        resultCards.forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-3px)';
+                this.style.transition = 'transform 0.3s ease';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
+        });
+
+        // Add click tracking for popular search terms
+        const popularSearchLinks = document.querySelectorAll('.popular-searches a, .search-suggestions a');
+        popularSearchLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                // Could track popular search analytics here
+                console.log('Popular search clicked:', this.textContent);
+            });
+        });
+    });
+
+    // Auto-focus search input when page loads
+    window.addEventListener('load', function() {
+        const searchInput = document.querySelector('input[name="q"]');
+        if (searchInput && !searchInput.value) {
+            searchInput.focus();
+        }
+    });
+</script>
+{% endblock %}
